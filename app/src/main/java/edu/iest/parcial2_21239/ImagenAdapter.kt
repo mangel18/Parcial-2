@@ -1,5 +1,7 @@
 package edu.iest.parcial2_21239
 
+import edu.iest.parcial2_21239.MainActivity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,9 +32,16 @@ class ImagenAdapter(private val listaImagen: ArrayList<Imagen>) : RecyclerView.A
         init {
             // Agregar OnClickListener
             itemView.setOnClickListener {
-                if (tvTexto.text.toString() == "Cerrar") {
-                    // Cerrar la aplicación
-                    finishAffinity(itemView.context as MainActivity)
+                when (tvTexto.text.toString()) {
+                    "Cerrar" -> {
+                        // Cerrar la aplicación
+                        finishAffinity(itemView.context as MainActivity)
+                    }
+                    "Perfil" -> {
+                        // Abrir la actividad de datos de usuario
+                        val intent = Intent(itemView.context, datos_usuario::class.java)
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }

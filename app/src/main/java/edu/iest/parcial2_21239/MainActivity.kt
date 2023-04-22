@@ -1,9 +1,12 @@
 package edu.iest.parcial2_21239
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -20,16 +23,6 @@ class MainActivity : AppCompatActivity() {
         rvListado = findViewById(R.id.rvListado)
         rvListado.layoutManager = GridLayoutManager(this, 2) // Configurar el GridLayoutManager para mostrar dos columnas
         rvListado.adapter = ImagenAdapter(listaImagen) // Configurar el Adapter con la lista de Imagen
-
-        // Configurar la action bar para mostrar el ícono
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_wifi)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_wifi)
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.setHomeAsUpIndicator(R.drawable.ic_wifi)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -44,6 +37,23 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_wifi)
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuWifi -> {
+                val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val networkInfo = connectivityManager.activeNetworkInfo
+
+                val isConnected = networkInfo != null && networkInfo.isConnected && networkInfo.type == ConnectivityManager.TYPE_WIFI
+
+                val mensaje = if (isConnected) "Estás conectado a WiFi" else "No estás conectado a WiFi"
+                Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private fun poblarLista() {
         listaImagen = ArrayList()
